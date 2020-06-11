@@ -1,10 +1,13 @@
 package com.example.hp.musicshop;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,14 +22,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Spinner spinner;
     ArrayList spinnerArrayList;
     ArrayAdapter spinnerAdapter;
+
     HashMap goodsMap;
     String goodsName;
     double price;
+    EditText userNameEditText;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userNameEditText = findViewById(R.id.PersonNameText);
         CreateSpinner();
         CreateMap();
     }
@@ -108,5 +115,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public void addToCart(View view) {
+
+        Order order = new Order();
+
+        order.userName = userNameEditText.getText().toString();
+
+        order.goodsName = goodsName;
+
+        order.quantity = quantity;
+
+        order.orderPrice = quantity * price;
+
+        Intent orderIntent = new Intent(MainActivity.this,OrderActivity.class);
+
+        orderIntent.putExtra("userNameForIntent",order.userName);
+        orderIntent.putExtra("goodsNameForIntent",order.goodsName);
+        orderIntent.putExtra("quantityForIntent",order.quantity);
+        orderIntent.putExtra("orderPriceForIntent",order.orderPrice);
+
+        startActivity(orderIntent);
     }
 }
